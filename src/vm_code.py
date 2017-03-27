@@ -7,16 +7,36 @@ import statsmodels.formula.api as smf
 from pandas.tools.plotting import scatter_matrix
 import matplotlib.pyplot as plt
 
-train_data = pd.read_csv('../data/Train.csv')
+train_data = pd.read_csv('../data/Train.csv', low_memory=False)
 train_data.head()
 train_data.describe()
 
 features = list(train_data)
-for f in features:
-    query = 'SalePrice~' + f
-    model = smf.model = smf.ols(formula = query,data=train_data).fit()
-    print model.summary()
 
+# Do pairwise regressions, dropping rows with nulls, and see if there are any signals
+
+for f, idx in features:
+    if f != 'SalePrice':
+        df = train_data[['SalePrice',f]]
+        df.dropna(how='any')
+        query = 'SalePrice~'+f
+        model = smf.ols(formula = query, data=df).fit()
+        print "-------------- \n" * 2
+        print "SalePrice vs. {}\n".format(f)
+        print "-------------- \n" * 2
+        print model.summary()
+
+
+'''
+Features that seem promising (some R^2 + intuition):
+'MachineID', 'YearMade', 'UsageBand'
+'''
+
+# for f in features:
+#     query = 'SalePrice~' + f
+#     model = smf.model = smf.ols(formula = query,data=train_data).fit()
+#     print model.summary()
+#
 
 
 # # create list of features that matter for regression, exclude those that don't
