@@ -1,1 +1,5 @@
-data/
+Data Dictionary.xlsx
+Train.csv
+do_not_open/
+median_benchmark.csv
+test.csv
