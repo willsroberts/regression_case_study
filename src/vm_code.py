@@ -13,6 +13,8 @@ train_data.describe()
 
 features = list(train_data)
 
+train_data.isnull().sum().sort_values()
+
 # Do pairwise regressions, dropping rows with nulls, and see if there are any signals
 
 for f, idx in features:
@@ -21,11 +23,10 @@ for f, idx in features:
         df.dropna(how='any')
         query = 'SalePrice~'+f
         model = smf.ols(formula = query, data=df).fit()
-        print "-------------- \n" * 2
+        print "--------------"
         print "SalePrice vs. {}\n".format(f)
-        print "-------------- \n" * 2
+        print "--------------"
         print model.summary()
-
 
 '''
 Features that seem promising (some R^2 + intuition):
