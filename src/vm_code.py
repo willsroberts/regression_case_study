@@ -9,23 +9,33 @@ import matplotlib.pyplot as plt
 
 train_data = pd.read_csv('../data/Train.csv')
 train_data.head()
+train_data.describe()
 
-# create list of features that matter for regression, exclude those that don't
-excluded = ['SalePrice','SalesID', 'MachineID', 'ModelID', 'datasource', 'auctioneerID', 'fiModelDesc', 'fiBaseModel', 'fiSecondaryDesc', 'fiModelSeries', 'fiModelDescriptor']
+features = list(train_data)
+for f in features:
+    query = 'SalePrice~' + f
+    model = smf.model = smf.ols(formula = query,data=train_data).fit()
+    print model.summary()
 
-# remove features with lots of null values
-high_NaN_count = ['auctioneerID', 'MachineHoursCurrentMeter','UsageBand', 'fiSecondaryDesc','fiModelSeries','fiModelDescriptor']
-cols = list(train_data)
 
-def remove_from_list(l, to_exclude):
-    for elem in to_exclude:
-        if elem in l:
-            l.remove(elem)
 
-remove_from_list(cols, excluded)
-remove_from_list(cols, high_NaN_count)
-
-features = '+'.join(cols)
-query = 'SalePrice~' + features
-
-big_model = smf.ols(formula = query,data=df).fit()
+# # create list of features that matter for regression, exclude those that don't
+# excluded = ['SalePrice','SalesID', 'MachineID', 'ModelID', 'datasource', 'auctioneerID', 'fiModelDesc', 'fiBaseModel', 'fiSecondaryDesc', 'fiModelSeries', 'fiModelDescriptor']
+#
+# # remove features with lots of null values
+# high_NaN_count = ['auctioneerID', 'MachineHoursCurrentMeter','UsageBand', 'fiSecondaryDesc','fiModelSeries','fiModelDescriptor']
+# cols = list(train_data)
+#
+# def remove_from_list(l, to_exclude):
+#     for elem in to_exclude:
+#         if elem in l:
+#             l.remove(elem)
+#
+# remove_from_list(cols, excluded)
+# remove_from_list(cols, high_NaN_count)
+#
+# features = '+'.join(cols)
+# query = 'SalePrice~' + features
+#
+# big_model = smf.ols(formula = query,data=train_data).fit()
+# big_model.summary()
